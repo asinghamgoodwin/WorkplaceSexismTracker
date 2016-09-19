@@ -1,0 +1,10 @@
+<body>
+<div align="center">
+    <h1>Fill out this form to report a new event. </h1> 
+<form action="{% url 'eventCreated' %}" method="post">
+{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="Submit"> 
+</form>
+</div>
+</body>
