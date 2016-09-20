@@ -79,7 +79,7 @@ WSGI_APPLICATION = 'WorkplaceSexismTracker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'sexism_database',
+        'NAME': 'sexism_database_2',
     }
 }
 

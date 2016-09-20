@@ -1,1 +1,10 @@
-login page
+<body>
+<div align="center">
+    <h1>Login page. </h1> 
+<form action="{% url 'acceptLogin' %}" method="post">
+{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" name="Submit"> 
+</form>
+</div>
+</body>
