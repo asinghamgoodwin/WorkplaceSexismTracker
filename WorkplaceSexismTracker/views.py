@@ -1,13 +1,27 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from models import Event
-from forms import EventForm
+from forms import EventForm, UserForm, LoginForm
 
 def index(request):
     events = Event.objects.all()
     event1desc = events[0].event_description
-    return HttpResponse(event1desc)
-#    return render(request, 'test.html')
+    return HttpResponse("this is just a test that things are linked up to a database: "+event1desc)
+    # pass to login page instead?
+
+def login(request):
+    form = LoginForm()
+    return render(request, 'login.html', {'form':form})
+
+def acceptLogin(request):
+    pass
+
+def newUser(request):
+    form = UserForm()
+    return render(request, 'newUser.html', {'form':form})
+
+def userCreated(request):
+    pass
 
 def newEvent(request):
     form = EventForm()
