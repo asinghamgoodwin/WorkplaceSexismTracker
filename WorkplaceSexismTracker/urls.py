@@ -20,10 +20,10 @@ import views as views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index, name='index'),
-    url('newEvent', views.newEvent, name='newEvent'),
+    url(r'^(?P<user_id>[0-9]+)/newEvent/$', views.newEvent, name='newEvent'),
     url('newUser', views.newUser, name='newUser'),
     url('login', views.login, name='login'),
-    url('eventCreated', views.eventCreated, name='eventCreated'),
+    url(r'^(?P<user_id>[0-9]+)/eventCreated/$', views.eventCreated, name='eventCreated'),
     url('userCreated', views.userCreated, name='userCreated'),
     url('acceptLogin', views.acceptLogin, name='acceptLogin'),
 ]

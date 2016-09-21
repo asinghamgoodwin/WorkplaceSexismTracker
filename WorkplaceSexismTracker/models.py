@@ -13,7 +13,7 @@ class User(models.Model):
 
 
 class Event(models.Model):
-    event_user = models.ForeignKey(Category, on_delete=models.CASCADE)
+    event_user = models.ForeignKey(User, on_delete=models.CASCADE)
     #if the user is deleted, delete this event too
     event_date = models.DateField(default=datetime.date.today)
     event_people = models.CharField(max_length=100, null=True, blank=True)
@@ -26,10 +26,9 @@ class Event(models.Model):
                                                         (2,"harassment"),
                                                         (3,"stereotyping")
                                                         ])
-    event_cost_rating = models.IntegerField(null=True, blank=True)
-    event_cost_desc = models.CharField(max_length=100, null=True, blank=True,
-                                        choices=[(1,1),(2,2),(3,3),(4,4),(5,5)]
-                                        )
+    event_cost_rating = models.IntegerField(choices=[(1,1),(2,2),(3,3),(4,4),(5,5)],
+                                            null=True, blank=True)
+    event_cost_desc = models.CharField(max_length=100, null=True, blank=True)
 
 
 #    uncomment this out later! once we learn how to have initial data in the database

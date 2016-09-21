@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from models import Event, User, Category
 from forms import EventForm, UserForm, LoginForm
 
@@ -37,23 +37,50 @@ def userCreated(request):
         quickResponse = []
         for user in users:
             quickResponse.append(user.user_name+" - "+user.user_password+" - "+user.user_email)
-        return HttpResponse("/n".join(quickResponse))
+        return HttpResponse(" | ".join(quickResponse))
     return HttpResponse("didn't get new user info from form")
 
-def newEvent(request):
+def newEvent(request, user_id):
     form = EventForm()
-    return render(request, 'newEvent.html', {'form':form})
+    return render(request, 'newEvent.html', {'form':form, 'user_id':user_id})
 
-def eventCreated(request):
+def eventCreated(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        raise Http404("That user does not exist")
+
     if request.POST:
-#        desc = request.POST['event_description']
-#
-#        newEvent = Event(event_description=desc)
-#        newEvent.save()
-#
-#        events = Event.objects.all()
-#        descList = [event.event_description for event in events]
-#        lastDesc = descList[-1]
-#        return HttpResponse(lastDesc)
-        return HttpResonse('got new event info from form')
+        event_user = user
+        event_date = request.POST['event_date']
+        event_people = request.POST['event_people']
+        event_private_yesno  = request.POST['event_private_yesno']
+        event_description = request.POST['event_description']
+        event_immediate_response_yesno = request.POST['event_immediate_response_yesno']
+        event_reaction = request.POST['event_reaction']
+        event_category = request.POST['event_category']
+        event_cost_rating = request.POST['event_cost_rating']
+        event_cost_desc = request.POST['event_cost_desc']
+
+        newEvent = Event(event_user=event_user,
+                        event_date=event_date,
+                        event_people=event_people,
+                        event_private_yesno=event_private_yesno,
+                        event_description=event_description,
+                        event_immediate_response_yesno=event_immediate_response_yesno,
+                        event_reaction=event_reaction,
+                        event_category=event_category,
+                        event_cost_rating=event_cost_rating,
+                        event_cost_desc=event_cost_desc,
+                        )
+
+        newEvent.save()
+        print newEvent.category
+        print newEvent.user
+        return HttpResponse('got new event info from form')
     else: return HttpResponse("didn't get new event info from form")
+
+
+#def home(request, user_id):
+#    eventsByDate = []
+#    return render(request, 'home.html', {'events':eventsByDate})
