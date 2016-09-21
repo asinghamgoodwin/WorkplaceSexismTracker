@@ -26,4 +26,6 @@ urlpatterns = [
     url(r'^(?P<user_id>[0-9]+)/eventCreated/$', views.eventCreated, name='eventCreated'),
     url('userCreated', views.userCreated, name='userCreated'),
     url('acceptLogin', views.acceptLogin, name='acceptLogin'),
+    url('info', views.info, name='info'),
+    url(r'^(?P<user_id>[0-9]+)/home/$', views.home, name='home'),
 ]

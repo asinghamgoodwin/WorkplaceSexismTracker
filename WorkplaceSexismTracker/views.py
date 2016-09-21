@@ -1,8 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponse, Http404
+from django.http import HttpResponse, Http404, HttpResponseRedirect
+from django.core.urlresolvers import reverse
 from models import Event, User, Category
 from forms import EventForm, UserForm, LoginForm
 
+## THIS SECTION IS JUST BARE-BONES, LOTS TO IMPROVE UPON/IMPLEMENT
 def index(request):
     events = Event.objects.all()
     event1desc = events[0].event_description
@@ -39,11 +41,21 @@ def userCreated(request):
             quickResponse.append(user.user_name+" - "+user.user_password+" - "+user.user_email)
         return HttpResponse(" | ".join(quickResponse))
     return HttpResponse("didn't get new user info from form")
+## END OF BORING PARTS
 
+
+#record a new event that took place
 def newEvent(request, user_id):
+    try:
+        userFromId = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        raise Http404("That user does not exist")
+
     form = EventForm()
     return render(request, 'newEvent.html', {'form':form, 'user_id':user_id})
 
+#save a new event into the database
+#this gets called when someone submits a form on the newEvent page
 def eventCreated(request, user_id):
     try:
         user = User.objects.get(pk=user_id)
@@ -75,12 +87,24 @@ def eventCreated(request, user_id):
                         )
 
         newEvent.save()
-        print newEvent.category
-        print newEvent.user
-        return HttpResponse('got new event info from form')
+        return HttpResponseRedirect(reverse('home', args=(user_id)))
     else: return HttpResponse("didn't get new event info from form")
 
 
-#def home(request, user_id):
-#    eventsByDate = []
-#    return render(request, 'home.html', {'events':eventsByDate})
+def home(request, user_id):
+    try:
+        userFromId = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        raise Http404("That user does not exist")
+
+    allEvents = Event.objects.all()
+    userEvents = [e for e in allEvents if e.event_user == userFromId]
+    eventsByDate = userEvents #later, sort this.
+    return render(request, 'home.html', {'user_id':user_id, 'events':eventsByDate})
+
+def info(request):
+    return HttpResponse("here we'd like to have lots of info about recognizing and responding to sexism in the workplace")
+
+
+
+

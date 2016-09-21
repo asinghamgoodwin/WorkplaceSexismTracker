@@ -1,0 +1,9 @@
+<body>
+    <h1>Welcome user # {{user_id}}</h1>
+    <br>
+    <br>
+    <h2>Event list</h2>
+    {% for event in events %}
+    <p>{{ event.event_description }}</p>
+    {% endfor %}
+</body>
